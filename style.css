@@ -1,0 +1,200 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 20px;
+}
+
+header, footer {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+input[type="text"] {
+  padding: 10px;
+  flex: 1 1 250px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #007acc;
+}
+
+main {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+#results {
+  flex: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.recipe-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 10px;
+  text-align: center;
+}
+
+.recipe-card img {
+  width: 100%;
+  max-height: 200px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.recipe-card h3 {
+  margin-top: 10px;
+  font-size: 1.1em;
+}
+
+/* Aside Favoritos */
+aside#favorites {
+  flex: 1;
+  max-width: 300px;
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.favorite-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.favorite-card img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.favorite-card h4 {
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.favorite-card textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 60px;
+  margin-bottom: 10px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: inherit;
+}
+
+.favorite-card button {
+  padding: 6px 12px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.favorite-card button:hover {
+  background-color: #c0392b;
+}
+
+
+.resultado-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+}
+
+.resultado-card img {
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.resultado-card h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.resultado-card button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.resultado-card button:hover {
+  background-color: #e68900;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input[type="text"], button {
+    width: 100%;
+  }
+
+  main {
+    flex-direction: column;
+  }
+
+  aside#favorites {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  #results {
+    grid-template-columns: 1fr;
+  }
+}

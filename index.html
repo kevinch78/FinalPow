@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recetario CRUD</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Recetario Interactivo</h1>
+    <p>Busca recetas, guárdalas como favoritas y añade tus notas</p>
+  </header>
+
+  <form id="search-form">
+    <input type="text" id="search-input" placeholder="Busca una receta..." />
+    <button type="submit">Buscar</button>
+  </form>
+
+  <main>
+    <section id="results">
+      <!-- Recetas buscadas aparecerán aquí -->
+    </section>
+
+    <aside id="favorites">
+      <h2>Favoritos</h2>
+      <!-- Favoritos se cargarán aquí -->
+    </aside>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Recetario Interactivo</p>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
