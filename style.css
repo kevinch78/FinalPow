@@ -1,200 +1,139 @@
 * {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-  padding: 20px;
+  background-color: #e0efd8;
+  padding: 1rem;
 }
 
-header, footer {
-  text-align: center;
-  margin-bottom: 20px;
+header {
+  background-color: #9fcc8a;
+  padding: 1rem;
+  border-bottom: 2px solid #477b35;
+  border-radius: 10px;
+  position: relative;
+}
+
+.favorite-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+#toggle-favorites {
+  background-color: hsl(45, 100%, 58%);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 form {
+  margin: 1rem 0;
   display: flex;
+  gap: 1rem;
   justify-content: center;
-  margin-bottom: 20px;
-  gap: 10px;
-  flex-wrap: wrap;
 }
 
 input[type="text"] {
-  padding: 10px;
-  flex: 1 1 250px;
-  min-width: 200px;
-  border: 1px solid #ccc;
+  padding: 0.5rem;
+  width: 60%;
   border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #00a8ff;
-  color: white;
+button[type="submit"] {
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
   border: none;
+  color: white;
+  font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
-}
-
-button:hover {
-  background-color: #007acc;
-}
-
-main {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
 }
 
 #results {
-  flex: 2;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.recipe-card {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  padding: 10px;
-  text-align: center;
+.resultado-card,
+.favorito-card {
+  background-color: #f1f8ed;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
 }
 
-.recipe-card img {
+.resultado-card:hover,
+.favorito-card:hover {
+  transform: scale(1.02);
+}
+
+.resultado-card img,
+.favorito-card img {
   width: 100%;
-  max-height: 200px;
   border-radius: 5px;
-  object-fit: cover;
+  margin-top: 0.5rem;
 }
 
-.recipe-card h3 {
-  margin-top: 10px;
-  font-size: 1.1em;
+.resultado-card button,
+.favorito-card button {
+  margin-top: 0.5rem;
+  background-color: #ee1c1c;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Aside Favoritos */
-aside#favorites {
-  flex: 1;
-  max-width: 300px;
-  background-color: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+textarea {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: 1px solid #395f2c;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+#favorites-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 320px;
   height: 100%;
+  background-color: #9fcc8a;
+  border-left: 2px solid #9fcc8a;
+  padding: 1rem;
   overflow-y: auto;
+  z-index: 1000;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
 }
 
-.favorite-card {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 15px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
+#favorites-panel.visible {
+  transform: translateX(0);
 }
 
-.favorite-card img {
-  width: 100%;
-  max-height: 180px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-bottom: 10px;
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.favorite-card h4 {
-  font-size: 1.1em;
-  margin-bottom: 8px;
-}
-
-.favorite-card textarea {
-  width: 100%;
-  resize: vertical;
-  min-height: 60px;
-  margin-bottom: 10px;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-family: inherit;
-}
-
-.favorite-card button {
-  padding: 6px 12px;
-  background-color: #e74c3c;
-  color: white;
+#close-favorites {
+  background: none;
   border: none;
-  border-radius: 5px;
+  font-size: 1.2rem;
   cursor: pointer;
-}
-
-.favorite-card button:hover {
-  background-color: #c0392b;
-}
-
-
-.resultado-card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 15px;
-  background-color: #f9f9f9;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  max-width: 300px;
-}
-
-.resultado-card img {
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
-.resultado-card h3 {
-  margin: 0;
-  font-size: 1.2em;
-}
-
-.resultado-card button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  background-color: #ff9800;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.resultado-card button:hover {
-  background-color: #e68900;
-}
-
-
-/* Responsive */
-@media (max-width: 768px) {
-  form {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  input[type="text"], button {
-    width: 100%;
-  }
-
-  main {
-    flex-direction: column;
-  }
-
-  aside#favorites {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  #results {
-    grid-template-columns: 1fr;
-  }
 }

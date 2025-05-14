@@ -100,5 +100,57 @@ searchForm.addEventListener('submit', async e => {
   }
 });
 
+
+// Botón para desplegar favoritos
+const toggleBtn = document.getElementById('toggle-favorites');
+const favoritesPanel = document.getElementById('favorites-panel');
+const closeBtn = document.getElementById('close-favorites');
+const favCount = document.getElementById('fav-count');
+
+toggleBtn.addEventListener('click', () => {
+  favoritesPanel.classList.add('visible');
+});
+
+closeBtn.addEventListener('click', () => {
+  favoritesPanel.classList.remove('visible');
+});
+
+// Actualizar contador de favoritos
+function actualizarContadorFavoritos() {
+  favCount.textContent = favoritos.length;
+}
+
+// Añade esta línea al final de renderFavoritos
+function renderFavoritos() {
+  const favoritosLista = document.getElementById('favorites');
+  if (!favoritosLista) return;
+
+  favoritosLista.innerHTML = '';
+
+  if (favoritos.length === 0) {
+    favoritosLista.innerHTML = '<p>No hay favoritos aún.</p>';
+  } else {
+    favoritos.forEach(fav => {
+      const card = document.createElement('div');
+      card.classList.add('favorito-card');
+      card.innerHTML = `
+        <h4>${fav.nombre}</h4>
+        <img src="${fav.imagen}" alt="${fav.nombre}" />
+        <textarea placeholder="Nota personal..." data-id="${fav.idMeal}">${fav.nota || ''}</textarea>
+        <button onclick="eliminarFavorito('${fav.idMeal}')">Eliminar</button>
+      `;
+
+      const textarea = card.querySelector('textarea');
+      textarea.addEventListener('input', () => {
+        actualizarNota(fav.idMeal, textarea.value);
+      });
+
+      favoritosLista.appendChild(card);
+    });
+  }
+
+  actualizarContadorFavoritos();
+}
+
 // Cargar favoritos al iniciar
 renderFavoritos();
