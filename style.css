@@ -44,7 +44,7 @@ input[type="text"] {
   padding: 0.5rem;
   width: 60%;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #f1f8ed;
 }
 
 button[type="submit"] {
