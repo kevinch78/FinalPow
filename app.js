@@ -1,20 +1,35 @@
 const API_URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+
+// ELEMENTOS
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
 const resultados = document.getElementById('results');
-const favoritosLista = document.getElementById('favorites'); 
+const favoritosLista = document.getElementById('favorites');
 const toggleBtn = document.getElementById('toggle-favorites');
 const favoritesPanel = document.getElementById('favorites-panel');
 const closeBtn = document.getElementById('close-favorites');
 const favCount = document.getElementById('fav-count');
 const filtroFavoritosInput = document.getElementById('filtro-favoritos');
+const filtroConNotaCheckbox = document.getElementById('filtro-con-nota');
 
+// GESTIÓN DE ESTADO
+let estadoActual = 'inicio'; // inicio | buscando | resultados | favoritos | detalle
 let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
 
+// FUNCIONES DE ESTADO
+function cambiarEstado(nuevoEstado) {
+  estadoActual = nuevoEstado;
+  console.log('Estado actual:', estadoActual);
+  const estadoInfo = document.getElementById('estado-info');
+  if (estadoInfo) estadoInfo.textContent = `Estado: ${estadoActual}`;
+}
+
+// LOCAL STORAGE
 function guardarFavoritos() {
   localStorage.setItem('favoritos', JSON.stringify(favoritos));
 }
 
+// RENDER DE RESULTADOS
 function renderResultados(recetas) {
   if (!resultados) return;
   resultados.innerHTML = '';
@@ -34,8 +49,11 @@ function renderResultados(recetas) {
     `;
     resultados.appendChild(card);
   });
+
+  cambiarEstado('resultados');
 }
 
+// RENDER DE FAVORITOS
 function renderFavoritos(lista = favoritos) {
   if (!favoritosLista) return;
   favoritosLista.innerHTML = '';
@@ -55,17 +73,7 @@ function renderFavoritos(lista = favoritos) {
 
       const textarea = card.querySelector('textarea');
       textarea.addEventListener('input', () => {
-        const notaLimpia = textarea.value.trim();
-
-        // Validar longitud nota personal
-        if (notaLimpia.length > 200) {
-          alert('La nota no puede superar los 200 caracteres.');
-          textarea.value = notaLimpia.slice(0, 200);
-          actualizarNota(fav.idMeal, textarea.value.trim());
-          return;
-        }
-
-        actualizarNota(fav.idMeal, notaLimpia);
+        actualizarNota(fav.idMeal, textarea.value);
       });
 
       favoritosLista.appendChild(card);
@@ -73,8 +81,10 @@ function renderFavoritos(lista = favoritos) {
   }
 
   actualizarContadorFavoritos();
+  cambiarEstado('favoritos');
 }
 
+// FAVORITOS: AGREGAR, ELIMINAR, NOTAS
 function agregarAFavoritos(idMeal, nombre, imagen) {
   if (favoritos.some(f => f.idMeal === idMeal)) {
     // Ya está en favoritos, mostrar notificación
@@ -165,21 +175,17 @@ function filtrarFavoritos(texto) {
   renderFavoritos(favoritosFiltrados);
 }
 
+// BUSQUEDA DE RECETAS
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
   const query = searchInput.value.trim();
-
-  // Validar búsqueda vacía
   if (!query) {
-    alert('Por favor ingresa un término de búsqueda.');
+    alert('Por favor ingresa una palabra para buscar.');
     return;
   }
 
-  resultados.innerHTML = `
-    <p style="font-weight: bold; font-size: 1.2em;">
-      Cargando recetas<span class="dots">.</span>
-    </p>
-  `;
+  cambiarEstado('buscando');
+  resultados.innerHTML = `<p><strong>Cargando recetas<span class="dots">.</span></strong></p>`;
 
   let dotCount = 1;
   const loadingDots = setInterval(() => {
@@ -206,22 +212,22 @@ searchForm.addEventListener('submit', async e => {
   }
 });
 
-// Mostrar y ocultar panel de favoritos
+// MOSTRAR / OCULTAR FAVORITOS
 toggleBtn.addEventListener('click', () => {
   favoritesPanel.classList.add('visible');
+  cambiarEstado('favoritos');
 });
 
 closeBtn.addEventListener('click', () => {
   favoritesPanel.classList.remove('visible');
+  cambiarEstado('resultados');
 });
 
-// Filtro en favoritos
+// FILTROS
 filtroFavoritosInput.addEventListener('input', e => {
   const texto = e.target.value.trim();
   filtrarFavoritos(texto);
 });
-
-const filtroConNotaCheckbox = document.getElementById('filtro-con-nota');
 
 filtroConNotaCheckbox.addEventListener('change', () => {
   if (filtroConNotaCheckbox.checked) {
@@ -231,15 +237,12 @@ filtroConNotaCheckbox.addEventListener('change', () => {
   }
 });
 
-// Al iniciar: cargar favoritos y recetas aleatorias
+// INICIO
 window.addEventListener('DOMContentLoaded', async () => {
   renderFavoritos();
 
-  resultados.innerHTML = `
-    <p style="font-weight: bold; font-size: 1.2em;">
-      Cargando recetas<span class="dots">.</span>
-    </p>
-  `;
+  cambiarEstado('inicio');
+  resultados.innerHTML = `<p><strong>Cargando recetas<span class="dots">.</span></strong></p>`;
 
   let dotCount = 1;
   const loadingDots = setInterval(() => {
