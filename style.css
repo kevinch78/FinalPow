@@ -6,11 +6,7 @@
 }
 
 body {
-<<<<<<< HEAD
   background-color: #141b2d;
-=======
-  background-color: #16213e;
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
   padding: 2rem;
   color: #e5eaf5;
   min-height: 100vh;
@@ -46,11 +42,7 @@ header p {
 }
 
 #toggle-favorites {
-<<<<<<< HEAD
   background-color: #3b82f6;
-=======
-  background-color: #ffe066;
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
   border: none;
   padding: 0.7rem 1.3rem;
   font-weight: bold;
@@ -58,22 +50,13 @@ header p {
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-<<<<<<< HEAD
   color: #fff;
-=======
-  color: #1a237e;
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
   font-size: 1rem;
 }
 
 #toggle-favorites:hover {
-<<<<<<< HEAD
   background-color: #2563eb;
   color: #fff;
-=======
-  background-color: #ffd43b;
-  color: #0d1333;
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
   transform: translateY(-2px) scale(1.04);
 }
 
@@ -98,22 +81,13 @@ input[type="text"] {
 
 input[type="text"]:focus {
   outline: none;
-<<<<<<< HEAD
   border-color: #3b82f6;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-=======
-  border-color: #3f51b5;
-  box-shadow: 0 0 0 4px rgba(63, 81, 181, 0.15);
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
 }
 
 button[type="submit"] {
   padding: 1rem 2rem;
-<<<<<<< HEAD
   background-color: #43e6c2;
-=======
-  background-color: #7dd6c0;
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
   border: none;
   color: #17443a;
   font-weight: bold;
@@ -125,11 +99,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-<<<<<<< HEAD
   background-color: #1cc8a5;
-=======
-  background-color: #5ec9a7;
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
   color: #0d2c23;
   transform: translateY(-2px) scale(1.04);
 }
@@ -211,13 +181,8 @@ textarea {
 
 textarea:focus {
   outline: none;
-<<<<<<< HEAD
   border-color: #3b82f6;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.13);
-=======
-  border-color: #3f51b5;
-  box-shadow: 0 0 0 4px rgba(63, 81, 181, 0.13);
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
 }
 
 #favorites-panel {
@@ -284,11 +249,7 @@ textarea:focus {
   align-items: center;
   margin-bottom: 1.2rem;
   padding: 0.7rem;
-<<<<<<< HEAD
   background: #141b2d;
-=======
-  background: #16213e;
->>>>>>> 95baae8b5ce6f7b0bd8746ed62df9a8b14ef5865
   border-radius: 10px;
 }
 

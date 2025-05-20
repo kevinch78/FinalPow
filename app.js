@@ -113,47 +113,6 @@ function actualizarContadorFavoritos() {
   favCount.textContent = favoritos.length;
 }
 
-function mostrarNotificacion(mensaje) {
-  // Eliminar notificaciones anteriores
-  const notificacionesAnteriores = document.querySelectorAll('.notificacion');
-  notificacionesAnteriores.forEach(notif => notif.remove());
-  
-  // Crear nueva notificación
-  const notificacion = document.createElement('div');
-  notificacion.classList.add('notificacion');
-  notificacion.textContent = mensaje;
-  document.body.appendChild(notificacion);
-  
-  // Añadir estilos inline (por si no se cargaron los estilos CSS)
-  notificacion.style.position = 'fixed';
-  notificacion.style.top = '20px';
-  notificacion.style.right = '20px';
-  notificacion.style.backgroundColor = '#28a745';
-  notificacion.style.color = 'white';
-  notificacion.style.padding = '10px 20px';
-  notificacion.style.borderRadius = '5px';
-  notificacion.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
-  notificacion.style.zIndex = '2000';
-  notificacion.style.opacity = '0';
-  notificacion.style.transform = 'translateY(-20px)';
-  notificacion.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-  
-  // Animar entrada
-  setTimeout(() => {
-    notificacion.style.opacity = '1';
-    notificacion.style.transform = 'translateY(0)';
-  }, 10);
-  
-  // Eliminar después de 3 segundos
-  setTimeout(() => {
-    notificacion.style.opacity = '0';
-    notificacion.style.transform = 'translateY(-20px)';
-    
-    setTimeout(() => {
-      notificacion.remove();
-    }, 500);
-  }, 3000);
-}
 
 function filtrarFavoritos(texto) {
   const textoMin = texto.toLowerCase();
