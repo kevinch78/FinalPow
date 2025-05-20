@@ -7,6 +7,7 @@ const toggleBtn = document.getElementById('toggle-favorites');
 const favoritesPanel = document.getElementById('favorites-panel');
 const closeBtn = document.getElementById('close-favorites');
 const favCount = document.getElementById('fav-count');
+const filtroFavoritosInput = document.getElementById('filtro-favoritos');
 
 let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
 
@@ -35,14 +36,14 @@ function renderResultados(recetas) {
   });
 }
 
-function renderFavoritos() {
+function renderFavoritos(lista = favoritos) {
   if (!favoritosLista) return;
   favoritosLista.innerHTML = '';
 
-  if (favoritos.length === 0) {
+  if (lista.length === 0) {
     favoritosLista.innerHTML = '<p>No hay favoritos aún.</p>';
   } else {
-    favoritos.forEach(fav => {
+    lista.forEach(fav => {
       const card = document.createElement('div');
       card.classList.add('favorito-card');
       card.innerHTML = `
@@ -54,7 +55,17 @@ function renderFavoritos() {
 
       const textarea = card.querySelector('textarea');
       textarea.addEventListener('input', () => {
-        actualizarNota(fav.idMeal, textarea.value);
+        const notaLimpia = textarea.value.trim();
+
+        // Validar longitud nota personal
+        if (notaLimpia.length > 200) {
+          alert('La nota no puede superar los 200 caracteres.');
+          textarea.value = notaLimpia.slice(0, 200);
+          actualizarNota(fav.idMeal, textarea.value.trim());
+          return;
+        }
+
+        actualizarNota(fav.idMeal, notaLimpia);
       });
 
       favoritosLista.appendChild(card);
@@ -89,10 +100,33 @@ function actualizarContadorFavoritos() {
   favCount.textContent = favoritos.length;
 }
 
+function filtrarFavoritos(texto) {
+  const textoMin = texto.toLowerCase();
+
+  const favoritosFiltrados = favoritos.filter(fav => {
+    const nombreCoincide = fav.nombre.toLowerCase().includes(textoMin);
+    const tieneNota = fav.nota && fav.nota.trim().length > 0;
+    const buscarNota = textoMin === 'con nota';
+    const buscarSinNota = textoMin === 'sin nota';
+
+    if (buscarNota) return tieneNota;
+    if (buscarSinNota) return !tieneNota;
+
+    return nombreCoincide;
+  });
+
+  renderFavoritos(favoritosFiltrados);
+}
+
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
   const query = searchInput.value.trim();
-  if (!query) return;
+
+  // Validar búsqueda vacía
+  if (!query) {
+    alert('Por favor ingresa un término de búsqueda.');
+    return;
+  }
 
   resultados.innerHTML = `
     <p style="font-weight: bold; font-size: 1.2em;">
@@ -134,7 +168,23 @@ closeBtn.addEventListener('click', () => {
   favoritesPanel.classList.remove('visible');
 });
 
-// Cargar favoritos + recetas aleatorias al iniciar
+// Filtro en favoritos
+filtroFavoritosInput.addEventListener('input', e => {
+  const texto = e.target.value.trim();
+  filtrarFavoritos(texto);
+});
+
+const filtroConNotaCheckbox = document.getElementById('filtro-con-nota');
+
+filtroConNotaCheckbox.addEventListener('change', () => {
+  if (filtroConNotaCheckbox.checked) {
+    filtrarFavoritos('con nota');
+  } else {
+    renderFavoritos();
+  }
+});
+
+// Al iniciar: cargar favoritos y recetas aleatorias
 window.addEventListener('DOMContentLoaded', async () => {
   renderFavoritos();
 

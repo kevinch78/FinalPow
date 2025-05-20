@@ -10,11 +10,11 @@
   <header>
     <h1>Recetario Interactivo</h1>
     <p>Busca recetas, guárdalas como favoritas y añade tus notas</p>
-    <div class="favorite-toggle">
+    <aside class="favorite-toggle">
       <button id="toggle-favorites">
         ⭐ Favoritos (<span id="fav-count">0</span>)
       </button>
-    </div>
+    </aside>
   </header>
 
   <form id="search-form">
@@ -26,13 +26,19 @@
     <section id="results"></section>
   </main>
 
-  <div id="favorites-panel" class="hidden">
-    <div class="panel-header">
+  <aside id="favorites-panel" class="hidden">
+    <input type="text" id="filtro-favoritos" placeholder="Buscar por nombre o con notas..." />
+      <label style="margin-left: 10px;">
+        <input type="checkbox" id="filtro-con-nota" />
+        Solo con nota
+      </label>
+
+    <section class="panel-header">
       <h2>Mis Favoritos</h2>
       <button id="close-favorites">✖</button>
-    </div>
+    </section>
     <div id="favorites" class="favorites-container"></div>
-  </div>
+  </aside>
 
   <footer>
     <p>&copy; 2025 Recetario Interactivo</p>
