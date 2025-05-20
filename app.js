@@ -86,7 +86,10 @@ function renderFavoritos(lista = favoritos) {
 
 // FAVORITOS: AGREGAR, ELIMINAR, NOTAS
 function agregarAFavoritos(idMeal, nombre, imagen) {
-  if (favoritos.some(f => f.idMeal === idMeal)) return;
+  if (favoritos.some(f => f.idMeal === idMeal)) {
+    alert('Esta receta ya está en tus favoritos');
+    return;
+  }
   favoritos.push({ idMeal, nombre, imagen, nota: '' });
   guardarFavoritos();
   renderFavoritos();
