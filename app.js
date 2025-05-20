@@ -19,14 +19,18 @@ let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
 // FUNCIONES DE ESTADO
 function cambiarEstado(nuevoEstado) {
   estadoActual = nuevoEstado;
-  console.log('Estado actual:', estadoActual);
   const estadoInfo = document.getElementById('estado-info');
   if (estadoInfo) estadoInfo.textContent = `Estado: ${estadoActual}`;
 }
 
-// LOCAL STORAGE
-function guardarFavoritos() {
-  localStorage.setItem('favoritos', JSON.stringify(favoritos));
+// SIMULAR ASINCRONÍA CON LOCALSTORAGE
+function guardarFavoritosAsync() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      localStorage.setItem('favoritos', JSON.stringify(favoritos));
+      resolve();
+    }, 100);
+  });
 }
 
 // RENDER DE RESULTADOS
@@ -91,21 +95,25 @@ function agregarAFavoritos(idMeal, nombre, imagen) {
     return;
   }
   favoritos.push({ idMeal, nombre, imagen, nota: '' });
-  guardarFavoritos();
-  renderFavoritos();
+  guardarFavoritosAsync().then(() => {
+    renderFavoritos();
+  });
 }
 
 function eliminarFavorito(idMeal) {
   favoritos = favoritos.filter(f => f.idMeal !== idMeal);
-  guardarFavoritos();
-  renderFavoritos();
+  guardarFavoritosAsync().then(() => {
+    renderFavoritos();
+  });
 }
 
 function actualizarNota(idMeal, nota) {
   const favorito = favoritos.find(f => f.idMeal === idMeal);
   if (favorito) {
     favorito.nota = nota;
-    guardarFavoritos();
+    guardarFavoritosAsync().then(() => {
+      console.log('Nota guardada');
+    });
   }
 }
 
@@ -113,7 +121,7 @@ function actualizarContadorFavoritos() {
   favCount.textContent = favoritos.length;
 }
 
-
+// FILTRAR FAVORITOS
 function filtrarFavoritos(texto) {
   const textoMin = texto.toLowerCase();
 
@@ -132,8 +140,8 @@ function filtrarFavoritos(texto) {
   renderFavoritos(favoritosFiltrados);
 }
 
-// BUSQUEDA DE RECETAS
-searchForm.addEventListener('submit', async e => {
+// BUSQUEDA DE RECETAS (con Promesas explícitas)
+searchForm.addEventListener('submit', e => {
   e.preventDefault();
   const query = searchInput.value.trim();
   if (!query) {
@@ -153,20 +161,21 @@ searchForm.addEventListener('submit', async e => {
     }
   }, 500);
 
-  try {
-    const res = await fetch(API_URL + query);
-    const data = await res.json();
-    clearInterval(loadingDots);
-    if (data.meals) {
-      renderResultados(data.meals);
-    } else {
-      resultados.innerHTML = '<p class="mensaje-info">No se encontraron resultados.</p>';
-    }
-  } catch (error) {
-    clearInterval(loadingDots);
-    console.error('Error al buscar recetas:', error);
-    resultados.innerHTML = '<p class="mensaje-error">Hubo un error al buscar las recetas.</p>';
-  }
+  fetch(API_URL + query)
+    .then(res => res.json())
+    .then(data => {
+      clearInterval(loadingDots);
+      if (data.meals) {
+        renderResultados(data.meals);
+      } else {
+        resultados.innerHTML = '<p class="mensaje-info">No se encontraron resultados.</p>';
+      }
+    })
+    .catch(error => {
+      clearInterval(loadingDots);
+      console.error('Error al buscar recetas:', error);
+      resultados.innerHTML = '<p class="mensaje-error">Hubo un error al buscar las recetas.</p>';
+    });
 });
 
 // MOSTRAR / OCULTAR FAVORITOS
@@ -194,13 +203,12 @@ filtroConNotaCheckbox.addEventListener('change', () => {
   }
 });
 
-// INICIO
-window.addEventListener('DOMContentLoaded', async () => {
+// CARGAR RECETAS ALEATORIAS CON PROMISE.ALL
+window.addEventListener('DOMContentLoaded', () => {
   renderFavoritos();
-
   cambiarEstado('inicio');
-  resultados.innerHTML = `<p><strong>Cargando recetas<span class="dots">.</span></strong></p>`;
 
+  resultados.innerHTML = `<p><strong>Cargando recetas<span class="dots">.</span></strong></p>`;
   let dotCount = 1;
   const loadingDots = setInterval(() => {
     const span = document.querySelector('.dots');
@@ -210,20 +218,21 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   }, 500);
 
-  const recetasAleatorias = [];
+  const peticiones = Array.from({ length: 12 }, () =>
+    fetch('https://www.themealdb.com/api/json/v1/1/random.php')
+      .then(res => res.json())
+      .then(data => data.meals ? data.meals[0] : null)
+  );
 
-  for (let i = 0; i < 12; i++) {
-    try {
-      const res = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
-      const data = await res.json();
-      if (data.meals && data.meals.length > 0) {
-        recetasAleatorias.push(data.meals[0]);
-      }
-    } catch (error) {
-      console.error('Error al cargar receta aleatoria:', error);
-    }
-  }
-
-  clearInterval(loadingDots);
-  renderResultados(recetasAleatorias);
+  Promise.all(peticiones)
+    .then(recetas => {
+      clearInterval(loadingDots);
+      const recetasFiltradas = recetas.filter(Boolean);
+      renderResultados(recetasFiltradas);
+    })
+    .catch(error => {
+      clearInterval(loadingDots);
+      console.error('Error al cargar recetas aleatorias:', error);
+      resultados.innerHTML = '<p class="mensaje-error">Error al cargar recetas.</p>';
+    });
 });
